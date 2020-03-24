@@ -115,6 +115,7 @@ class IndexViewController: UIViewController {
                 self.tableView.endUpdates()
             }
         }))
+        
         present(alertController, animated: true, completion: nil)
     }
 }
