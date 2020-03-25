@@ -18,7 +18,6 @@ protocol TaskViewDelegate {
 
 class TaskViewController: UIViewController {
 
-    @IBOutlet weak var taskTextField: UITextField!
     @IBOutlet weak var importantSwitch: UISwitch!
     @IBOutlet weak var scheduleTimeTextField: UITextField!
     @IBOutlet weak var datePicker: UIDatePicker!
@@ -29,8 +28,10 @@ class TaskViewController: UIViewController {
     @IBOutlet weak var archiveButton: UIButton!
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var timeStackViewConst: NSLayoutConstraint!
+    @IBOutlet weak var taskTextView: UITextView!
     
     var delegate: TaskViewDelegate?
+    let placeholderLabel = UILabel()
     
     var tag: ListTag?
     var task: ListTask?
@@ -40,7 +41,13 @@ class TaskViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        taskTextField.delegate = self
+        taskTextView.delegate = self
+        placeholderLabel.text = "添加任务"
+        placeholderLabel.font = UIFont.systemFont(ofSize: taskTextView.font!.pointSize)
+        taskTextView.addSubview(placeholderLabel)
+        placeholderLabel.frame.origin = CGPoint(x: 5, y: taskTextView.layoutMargins.top)
+        placeholderLabel.textColor = UIColor.lightGray
+        placeholderLabel.sizeToFit()
         
         datePicker.layer.borderWidth = 1
         datePicker.layer.borderColor = UIColor.gray.cgColor
@@ -59,7 +66,8 @@ class TaskViewController: UIViewController {
         importantSwitch.transform = transform
 
         if isUpdate {
-            taskTextField.text = task!.taskName
+            placeholderLabel.isHidden = true
+            taskTextView.text = task!.taskName
             createTime.text = CustomUtils.dateToString(date: task!.createTime, formatter: .formatter3)
             updateTime.text = CustomUtils.dateToString(date: task!.updateTime, formatter: .formatter3)
             
@@ -80,6 +88,7 @@ class TaskViewController: UIViewController {
                 datePicker.date = date
                 scheduleTimeTextField.text = CustomUtils.dateToString(date: date, formatter: .formatter1)
                 scheduleTimeTextField.isUserInteractionEnabled = false
+                scheduleTimeTextField.clearButtonMode = .never
             }
             
             if task!.finished {
@@ -88,8 +97,8 @@ class TaskViewController: UIViewController {
                 self.view.layoutIfNeeded()
             }
         } else {
-            taskTextField.placeholder = "添加任务"
-            taskTextField.becomeFirstResponder()
+            placeholderLabel.isHidden = false
+            taskTextView.becomeFirstResponder()
             footerView.isHidden = true
             
             if tag?.tagId == 2 {
@@ -104,11 +113,10 @@ class TaskViewController: UIViewController {
                 scheduleTimeTextField.isUserInteractionEnabled = false
             }
         }
-        
     }
     
     @IBAction func saveListTask(_ sender: Any) {
-        let legalInput = taskTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        let legalInput = taskTextView.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         let schedule = !scheduleTimeTextField.text!.isEmpty
         if !legalInput.isEmpty {
             if isUpdate {
@@ -167,7 +175,7 @@ class TaskViewController: UIViewController {
     
     // 点击空白处收回软键盘
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        taskTextField.resignFirstResponder()
+        taskTextView.resignFirstResponder()
     }
     
     // 判断是否有更新
@@ -207,11 +215,18 @@ class TaskViewController: UIViewController {
     }
 }
 
-extension TaskViewController: UITextFieldDelegate {
+extension TaskViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        placeholderLabel.isHidden = !textView.text.isEmpty
+    }
     
-    // 点击Return收回软键盘
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        taskTextField.resignFirstResponder()
-        return false
+    // 当按写键盘"Return"，不换行，结束输入
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            taskTextView.resignFirstResponder()
+            return false
+        }
+        
+        return true
     }
 }

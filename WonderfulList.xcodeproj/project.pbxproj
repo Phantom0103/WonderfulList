@@ -15,6 +15,7 @@
 		CB2E73B12410AAC800215008 /* ListTagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2E73B02410AAC800215008 /* ListTagCell.swift */; };
 		CB3482D6241270180045B06B /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3482D5241270180045B06B /* TagViewController.swift */; };
 		CB3482DA2412866D0045B06B /* TagThemeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3482D92412866D0045B06B /* TagThemeCell.swift */; };
+		CB45D101242B80C1003A21C0 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB45D100242B80C0003A21C0 /* SearchViewController.swift */; };
 		CB49BCC52421BE95002CDE6A /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB49BCC42421BE95002CDE6A /* UserDefaultsKeys.swift */; };
 		CB56A46B2415D15B001FFC76 /* ListTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB56A46A2415D15B001FFC76 /* ListTask.swift */; };
 		CB56A46D2415DA28001FFC76 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB56A46C2415DA27001FFC76 /* TaskViewController.swift */; };
@@ -39,6 +40,7 @@
 		CB2E73B02410AAC800215008 /* ListTagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTagCell.swift; sourceTree = "<group>"; };
 		CB3482D5241270180045B06B /* TagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
 		CB3482D92412866D0045B06B /* TagThemeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagThemeCell.swift; sourceTree = "<group>"; };
+		CB45D100242B80C0003A21C0 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		CB49BCC42421BE95002CDE6A /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
 		CB56A46A2415D15B001FFC76 /* ListTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTask.swift; sourceTree = "<group>"; };
 		CB56A46C2415DA27001FFC76 /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 				CB56A46E2415E73E001FFC76 /* ListTaskCell.swift */,
 				CB56A4702415F2B2001FFC76 /* CustomUtils.swift */,
 				CB6B11FD242066B300D75FC3 /* MenuView.swift */,
+				CB45D100242B80C0003A21C0 /* SearchViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -265,6 +268,7 @@
 				CB2E739A2410968E00215008 /* AppDelegate.swift in Sources */,
 				CB6B11FE242066B300D75FC3 /* MenuView.swift in Sources */,
 				CB3482D6241270180045B06B /* TagViewController.swift in Sources */,
+				CB45D101242B80C1003A21C0 /* SearchViewController.swift in Sources */,
 				CB56A4712415F2B2001FFC76 /* CustomUtils.swift in Sources */,
 				CB56A46D2415DA28001FFC76 /* TaskViewController.swift in Sources */,
 				CB2E73B12410AAC800215008 /* ListTagCell.swift in Sources */,
