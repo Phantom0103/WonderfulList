@@ -20,6 +20,7 @@ class TaskViewController: UIViewController {
 
     @IBOutlet weak var importantSwitch: UISwitch!
     @IBOutlet weak var scheduleTimeTextField: UITextField!
+    @IBOutlet weak var scheduleTimeClearButton: UIButton!
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var createTime: UILabel!
     @IBOutlet weak var updateTime: UILabel!
@@ -64,6 +65,8 @@ class TaskViewController: UIViewController {
         var transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
         transform = transform.translatedBy(x: -offsetX, y: 0)
         importantSwitch.transform = transform
+        
+        scheduleTimeTextField.isUserInteractionEnabled = false
 
         if isUpdate {
             placeholderLabel.isHidden = true
@@ -87,8 +90,7 @@ class TaskViewController: UIViewController {
                 let date = task!.scheduleTime ?? minDate!.addingTimeInterval(TimeInterval(3600))
                 datePicker.date = date
                 scheduleTimeTextField.text = CustomUtils.dateToString(date: date, formatter: .formatter1)
-                scheduleTimeTextField.isUserInteractionEnabled = false
-                scheduleTimeTextField.clearButtonMode = .never
+                scheduleTimeClearButton.isHidden = true
             }
             
             if task!.finished {
@@ -110,7 +112,7 @@ class TaskViewController: UIViewController {
                 let date = minDate!.addingTimeInterval(TimeInterval(3600))
                 datePicker.date = date
                 scheduleTimeTextField.text = CustomUtils.dateToString(date: date, formatter: .formatter1)
-                scheduleTimeTextField.isUserInteractionEnabled = false
+                scheduleTimeClearButton.isHidden = true
             }
         }
     }
@@ -142,6 +144,10 @@ class TaskViewController: UIViewController {
         } else {
             datePicker.isHidden = true
         }
+    }
+    
+    @IBAction func clearScheduleTime(_ sender: Any) {
+        scheduleTimeTextField.text = nil;
     }
     
     @IBAction func finishTask(_ sender: Any) {
