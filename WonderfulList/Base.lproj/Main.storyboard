@@ -271,6 +271,7 @@
                                             <outlet property="scheduleInfoLabel" destination="jXc-aW-aoI" id="pSl-n1-cDV"/>
                                             <outlet property="taskLabel" destination="qxu-nW-O1S" id="dzR-g1-8Zp"/>
                                             <outlet property="taskTagLabel" destination="zXl-lc-auF" id="KAx-YF-KDw"/>
+                                            <segue destination="OeH-8u-lKD" kind="show" identifier="SearchTaskSegue" id="LWY-cm-eeB"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -897,7 +898,7 @@
         <image name="theme13-thumbnail" width="50" height="49"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="cL7-zf-C3r"/>
+        <segue reference="LWY-cm-eeB"/>
         <segue reference="Wgj-25-Ls5"/>
     </inferredMetricsTieBreakers>
 </document>

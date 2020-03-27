@@ -16,6 +16,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     
     let realm = try! Realm()
     var searchResults: Results<ListTask>?
+    var selectedIndexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +67,23 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         if searchText.isEmpty {
             searchResults = nil
             tableView.reloadData()
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "SearchTaskSegue" {
+            let vc = segue.destination as! TaskViewController
+            vc.delegate = self
+            
+            let cell = sender as! ListTaskCell
+            let indexPath = tableView.indexPath(for: cell)!
+            selectedIndexPath = indexPath
+            vc.task = searchResults![indexPath.row]
+            vc.tagId = searchResults![indexPath.row].tagId
+            vc.isUpdate = true
+            
+            let backItem = UIBarButtonItem(title: "搜索", style: .plain, target: self, action: nil)
+            self.navigationItem.backBarButtonItem = backItem
         }
     }
     
@@ -135,4 +153,29 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
+}
+
+extension SearchViewController: TaskViewDelegate {
+    
+    func didAddTask(taskName: String, important: Bool, schedule: Bool, scheduleTime: Date) {
+        
+    }
+    
+    func didUpdateTask(taskName: String, important: Bool, schedule: Bool, scheduleTime: Date) {
+        
+    }
+    
+    func didFinishTask(taskId: Int) {
+        
+    }
+    
+    func didDeleteTask(taskId: Int) {
+        
+    }
+    
+    func didArchiveTask(taskId: Int) {
+        
+    }
+    
+    
 }

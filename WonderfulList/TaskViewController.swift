@@ -34,7 +34,7 @@ class TaskViewController: UIViewController {
     var delegate: TaskViewDelegate?
     let placeholderLabel = UILabel()
     
-    var tag: ListTag?
+    var tagId: Int?
     var task: ListTask?
     var isUpdate = false
     var minDate: Date?
@@ -80,12 +80,12 @@ class TaskViewController: UIViewController {
                 scheduleTimeTextField.text = CustomUtils.dateToString(date: scheduleTime, formatter: .formatter1)
             }
             
-            if tag?.tagId == 2 {
+            if tagId == 2 {
                 // 重要，重要开关打开且不可修改
                 importantSwitch.isOn = true
                 importantSwitch.isEnabled = false
                 
-            } else if tag?.tagId == 3 {
+            } else if tagId == 3 {
                 // 计划，默认提醒时间为1小时后，且不可清空
                 let date = task!.scheduleTime ?? minDate!.addingTimeInterval(TimeInterval(3600))
                 datePicker.date = date
@@ -103,11 +103,11 @@ class TaskViewController: UIViewController {
             taskTextView.becomeFirstResponder()
             footerView.isHidden = true
             
-            if tag?.tagId == 2 {
+            if tagId == 2 {
                 // 重要，重要开关打开且不可修改
                 importantSwitch.isOn = true
                 importantSwitch.isEnabled = false
-            } else if tag?.tagId == 3 {
+            } else if tagId == 3 {
                 // 计划，默认提醒时间为1小时后，且不可清空
                 let date = minDate!.addingTimeInterval(TimeInterval(3600))
                 datePicker.date = date

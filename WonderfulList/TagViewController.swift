@@ -124,7 +124,7 @@ class TagViewController: UIViewController {
         if segue.identifier == "AddTaskSegue" {
             let vc = segue.destination as! TaskViewController
             vc.delegate = self
-            vc.tag = tag
+            vc.tagId = tag?.tagId
             
             let backItem = UIBarButtonItem(title: tag!.tagName, style: .plain, target: self, action: nil)
             self.navigationItem.backBarButtonItem = backItem
@@ -136,7 +136,7 @@ class TagViewController: UIViewController {
             let indexPath = tableView.indexPath(for: cell)!
             selectedIndexPath = indexPath
             vc.task = listTasks![indexPath.row]
-            vc.tag = tag
+            vc.tagId = tag?.tagId
             vc.isUpdate = true
             
             let backItem = UIBarButtonItem(title: tag!.tagName, style: .plain, target: self, action: nil)
