@@ -162,20 +162,61 @@ extension SearchViewController: TaskViewDelegate {
     }
     
     func didUpdateTask(taskName: String, important: Bool, schedule: Bool, scheduleTime: Date) {
-        
+        if let task = searchResults?[selectedIndexPath!.row] {
+            try? realm.write {
+                task.taskName = taskName
+                task.important = important
+                task.schedule = schedule
+                if schedule {
+                    task.scheduleTime = scheduleTime
+                } else {
+                    task.scheduleTime = nil
+                }
+                task.updateTime = Date.init()
+                
+                tableView.reloadRows(at: [selectedIndexPath!], with: .automatic)
+            }
+        }
     }
     
     func didFinishTask(taskId: Int) {
-        
+        if let task = searchResults?[selectedIndexPath!.row] {
+            if task.taskId == taskId {
+                try? realm.write {
+                    if !task.finished {
+                        task.finished = true
+                        task.updateTime = Date.init()
+                        
+                        let cell = tableView.cellForRow(at: selectedIndexPath!) as! ListTaskCell
+                        cell.finishTaskButton.setImage(UIImage(named: "action-finish"), for: .normal)
+                        let attributedText = NSAttributedString(string: task.taskName, attributes: [NSAttributedString.Key.strikethroughStyle: 1])
+                        cell.taskLabel.attributedText = attributedText
+                    }
+                }
+            }
+        }
     }
     
     func didDeleteTask(taskId: Int) {
-        
+        if let task = searchResults?[selectedIndexPath!.row] {
+            if task.taskId == taskId {
+                try? realm.write {
+                    realm.delete(task)
+                    tableView.deleteRows(at: [selectedIndexPath!], with: .fade)
+                }
+            }
+        }
     }
     
     func didArchiveTask(taskId: Int) {
-        
+        if let task = searchResults?[selectedIndexPath!.row] {
+            if task.taskId == taskId {
+                try? realm.write {
+                    task.archived = true
+                    task.updateTime = Date.init()
+                    tableView.deleteRows(at: [selectedIndexPath!], with: .fade)
+                }
+            }
+        }
     }
-    
-    
 }
