@@ -25,6 +25,10 @@ class CustomUtils {
         } else if formatter == .formatter3 {
             dateFormatter.dateFormat="MM-dd HH:mm"
             result = dateFormatter.string(from: date)
+        } else if formatter == .formatter4 {
+            let week = getWeek(date: date)
+            dateFormatter.dateFormat="yyyy-MM-dd HH:mm"
+            result = dateFormatter.string(from: date) + " \(week)"
         } else {
             result = dateFormatter.string(from: date)
         }
@@ -63,6 +67,9 @@ class CustomUtils {
         
         // 01-01 10:00
         case formatter3
+        
+        // 2020-01-01 10:00 周一
+        case formatter4
     }
 }
 
