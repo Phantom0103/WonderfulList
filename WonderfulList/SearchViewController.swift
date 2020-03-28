@@ -81,6 +81,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             vc.task = searchResults![indexPath.row]
             vc.tagId = searchResults![indexPath.row].tagId
             vc.isUpdate = true
+            vc.isSearch = true
             
             let backItem = UIBarButtonItem(title: "搜索", style: .plain, target: self, action: nil)
             self.navigationItem.backBarButtonItem = backItem

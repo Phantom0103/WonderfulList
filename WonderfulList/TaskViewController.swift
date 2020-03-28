@@ -37,6 +37,7 @@ class TaskViewController: UIViewController {
     var tagId: Int?
     var task: ListTask?
     var isUpdate = false
+    var isSearch = false
     var minDate: Date?
     
     override func viewDidLoad() {
@@ -67,6 +68,10 @@ class TaskViewController: UIViewController {
         importantSwitch.transform = transform
         
         scheduleTimeTextField.isUserInteractionEnabled = false
+        // 搜索进来的不允许修改任务名称
+        if isSearch {
+            taskTextView.isEditable = false
+        }
 
         if isUpdate {
             placeholderLabel.isHidden = true
