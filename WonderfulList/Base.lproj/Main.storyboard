@@ -643,9 +643,9 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Di-Pr-5bV">
                                 <rect key="frame" x="0.0" y="88" width="414" height="60"/>
                                 <subviews>
-                                    <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="Y5F-vT-v88">
+                                    <searchBar contentMode="redraw" placeholder="搜索" translatesAutoresizingMaskIntoConstraints="NO" id="Y5F-vT-v88">
                                         <rect key="frame" x="0.0" y="2" width="414" height="56"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
                                     </searchBar>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -782,6 +782,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="归档" id="Fny-rA-NpT"/>
                     <connections>
+                        <outlet property="searchBar" destination="Y5F-vT-v88" id="NhJ-5O-1c1"/>
                         <outlet property="tableView" destination="JZ6-tg-nlC" id="8kJ-c0-OfO"/>
                     </connections>
                 </viewController>
