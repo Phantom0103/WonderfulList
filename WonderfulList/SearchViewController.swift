@@ -14,6 +14,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: CustomTableView!
     
+    var taskCountDelegate: TagTaskCountDelegate?
+    
     let realm = try! Realm()
     var searchResults: Results<ListTask>?
     var selectedIndexPath: IndexPath?
@@ -49,6 +51,10 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                     cell.finishTaskButton.setImage(UIImage(named: "action-finish"), for: .normal)
                     let attributedText = NSAttributedString(string: task.taskName, attributes: [NSAttributedString.Key.strikethroughStyle: 1])
                     cell.taskLabel.attributedText = attributedText
+                }
+                
+                DispatchQueue.main.async {
+                    self.taskCountDelegate?.updateUnfinishedCount(task: task, value: task.finished ? -1 : 1)
                 }
             }
         }
@@ -176,6 +182,9 @@ extension SearchViewController: TaskViewDelegate {
                 task.updateTime = Date.init()
                 
                 tableView.reloadRows(at: [selectedIndexPath!], with: .automatic)
+                DispatchQueue.main.async {
+                    self.taskCountDelegate?.updateUnfinishedCountDefaultTag()
+                }
             }
         }
     }
@@ -192,6 +201,10 @@ extension SearchViewController: TaskViewDelegate {
                         cell.finishTaskButton.setImage(UIImage(named: "action-finish"), for: .normal)
                         let attributedText = NSAttributedString(string: task.taskName, attributes: [NSAttributedString.Key.strikethroughStyle: 1])
                         cell.taskLabel.attributedText = attributedText
+                        
+                        DispatchQueue.main.async {
+                            self.taskCountDelegate?.updateUnfinishedCount(task: task, value: -1)
+                        }
                     }
                 }
             }
@@ -202,8 +215,16 @@ extension SearchViewController: TaskViewDelegate {
         if let task = searchResults?[selectedIndexPath!.row] {
             if task.taskId == taskId {
                 try? realm.write {
+                    let finished = task.finished
+                    let tagId = task.tagId
                     realm.delete(task)
                     tableView.deleteRows(at: [selectedIndexPath!], with: .fade)
+                    
+                    if !finished {
+                        DispatchQueue.main.async {
+                            self.taskCountDelegate?.updateUnfinishedCountByDelete(tagId: tagId)
+                        }
+                    }
                 }
             }
         }
@@ -213,9 +234,16 @@ extension SearchViewController: TaskViewDelegate {
         if let task = searchResults?[selectedIndexPath!.row] {
             if task.taskId == taskId {
                 try? realm.write {
+                    let finished = task.finished
                     task.archived = true
                     task.updateTime = Date.init()
                     tableView.deleteRows(at: [selectedIndexPath!], with: .fade)
+                    
+                    if !finished {
+                        DispatchQueue.main.async {
+                            self.taskCountDelegate?.updateUnfinishedCount(task: task, value: -1)
+                        }
+                    }
                 }
             }
         }

@@ -9,6 +9,14 @@
 import UIKit
 import RealmSwift
 
+protocol TagTaskCountDelegate {
+    // 更新任务未完成数量，value：未完成数增加或者减少
+    func updateUnfinishedCount(task: ListTask, value: Int)
+    func updateUnfinishedCountByAdd(task: ListTask)
+    func updateUnfinishedCountByDelete(tagId: Int)
+    func updateUnfinishedCountDefaultTag()
+}
+
 class IndexViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
@@ -68,9 +76,11 @@ class IndexViewController: UIViewController {
         if segue.identifier == "AddTagSegue" {
             let vc = segue.destination as! TagViewController
             vc.delegate = self
+            vc.taskCountDelegate = self
         } else if segue.identifier == "ShowTagSegue" {
             let vc = segue.destination as! TagViewController
             vc.delegate = self
+            vc.taskCountDelegate = self
             vc.isUpdate = true
             
             let cell = sender as! ListTagCell
@@ -86,6 +96,12 @@ class IndexViewController: UIViewController {
             }
             
             selectedIndexPath = indexPath
+        } else if segue.identifier == "SearchTaskSegue" {
+            let vc = segue.destination as! SearchViewController
+            vc.taskCountDelegate = self
+        } else if segue.identifier == "ArchivedTaskSegue" {
+            let vc = segue.destination as! ArchivedViewController
+            vc.taskCountDelegate = self
         }
     }
     
@@ -110,9 +126,7 @@ class IndexViewController: UIViewController {
             }
   
             if success {
-                self.tableView.beginUpdates()
-                self.tableView.deleteRows(at: [indexPath], with: .automatic)
-                self.tableView.endUpdates()
+                self.tableView.reloadData()
             }
         }))
         
@@ -226,4 +240,57 @@ extension IndexViewController: TagViewDelegate, UITableViewDataSource, UITableVi
     func didDeleteTag(tag: ListTag) {
         self.deleteTag(tag: tag, indexPath: selectedIndexPath!)
     }
+}
+
+extension IndexViewController: TagTaskCountDelegate {
+    
+    func updateUnfinishedCount(task: ListTask, value: Int) {
+        let tagId = task.tagId
+        if tagId < 10 {
+            updateUnfinishedCountDefaultTag()
+        } else {
+            var r = 0
+            for (row, tag) in customTags!.enumerated() {
+                if tag.tagId == tagId {
+                    try? realm.write {
+                        tag.unfinishedTaskCount += value
+                    }
+                    r = row
+                    break
+                }
+            }
+            updateUnfinishedCountDefaultTag()
+            tableView.reloadRows(at: [IndexPath(row: r, section: 0)], with: .automatic)
+        }
+    }
+    
+    func updateUnfinishedCountByAdd(task: ListTask) {
+        let tagId = task.tagId
+        if tagId < 10 {
+            updateUnfinishedCountDefaultTag()
+        } else {
+            var r = 0
+            for (row, tag) in customTags!.enumerated() {
+                if tag.tagId == tagId {
+                    try? realm.write {
+                        tag.taskCount += 1
+                        tag.unfinishedTaskCount += 1
+                    }
+                    r = row
+                    break
+                }
+            }
+            updateUnfinishedCountDefaultTag()
+            tableView.reloadRows(at: [IndexPath(row: r, section: 0)], with: .automatic)
+        }
+    }
+    
+    func updateUnfinishedCountByDelete(tagId: Int) {
+        updateUnfinishedCountDefaultTag()
+    }
+    
+    func updateUnfinishedCountDefaultTag() {
+        tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0), IndexPath(row: 2, section: 0), IndexPath(row: 3, section: 0)], with: .automatic)
+    }
+    
 }

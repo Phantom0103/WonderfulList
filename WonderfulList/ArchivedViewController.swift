@@ -14,6 +14,8 @@ class ArchivedViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var tableView: CustomTableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
+    var taskCountDelegate: TagTaskCountDelegate?
+    
     let realm = try! Realm()
     var archivedTasks: Results<ListTask>?
     
@@ -72,6 +74,13 @@ class ArchivedViewController: UIViewController, UITableViewDataSource, UITableVi
                     task.archived = false
                     task.updateTime = Date.init()
                     tableView.deleteRows(at: [indexPath], with: .fade)
+                    
+                    // 未完成的恢复归档，未完成数+1
+                    if !task.finished {
+                        DispatchQueue.main.async {
+                            self.taskCountDelegate?.updateUnfinishedCount(task: task, value: 1)
+                        }
+                    }
                 }
             }
         }

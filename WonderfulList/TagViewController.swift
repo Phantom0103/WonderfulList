@@ -27,6 +27,7 @@ class TagViewController: UIViewController {
     @IBOutlet weak var footerViewBottomConst: NSLayoutConstraint!
     
     var delegate: TagViewDelegate?
+    var taskCountDelegate: TagTaskCountDelegate?
     
     var tag: ListTag?
     var selectedIndexPath: IndexPath?
@@ -174,6 +175,10 @@ class TagViewController: UIViewController {
                     cell.finishTaskButton.setImage(UIImage(named: "action-finish"), for: .normal)
                     let attributedText = NSAttributedString(string: task.taskName, attributes: [NSAttributedString.Key.strikethroughStyle: 1])
                     cell.taskLabel.attributedText = attributedText
+                }
+                
+                DispatchQueue.main.async {
+                    self.taskCountDelegate?.updateUnfinishedCount(task: task, value: task.finished ? -1 : 1)
                 }
             }
         }
@@ -443,8 +448,18 @@ extension TagViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             try? realm.write {
-                realm.delete(listTasks![indexPath.row])
+                let preDelete = listTasks![indexPath.row]
+                let tagId = preDelete.tagId
+                let finished = preDelete.finished
+                
+                realm.delete(preDelete)
                 tableView.deleteRows(at: [indexPath], with: .fade)
+                
+                if !finished {
+                    DispatchQueue.main.async {
+                        self.taskCountDelegate?.updateUnfinishedCountByDelete(tagId: tagId)
+                    }
+                }
             }
         }
     }
@@ -468,6 +483,10 @@ extension TagViewController: TaskViewDelegate {
             realm.add(task)
             tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         }
+        
+        DispatchQueue.main.async {
+            self.taskCountDelegate?.updateUnfinishedCountByAdd(task: task)
+        }
     }
     
     func didUpdateTask(taskName: String, important: Bool, schedule: Bool, scheduleTime: Date) {
@@ -484,6 +503,9 @@ extension TagViewController: TaskViewDelegate {
                 task.updateTime = Date.init()
                 
                 tableView.reloadRows(at: [selectedIndexPath!], with: .automatic)
+                DispatchQueue.main.async {
+                    self.taskCountDelegate?.updateUnfinishedCountDefaultTag()
+                }
             }
         }
     }
@@ -500,6 +522,10 @@ extension TagViewController: TaskViewDelegate {
                         cell.finishTaskButton.setImage(UIImage(named: "action-finish"), for: .normal)
                         let attributedText = NSAttributedString(string: task.taskName, attributes: [NSAttributedString.Key.strikethroughStyle: 1])
                         cell.taskLabel.attributedText = attributedText
+                        
+                        DispatchQueue.main.async {
+                            self.taskCountDelegate?.updateUnfinishedCount(task: task, value: -1)
+                        }
                     }
                 }
             }
@@ -510,8 +536,16 @@ extension TagViewController: TaskViewDelegate {
         if let task = listTasks?[selectedIndexPath!.row] {
             if task.taskId == taskId {
                 try? realm.write {
+                    let finished = task.finished
+                    let tagId = task.tagId
                     realm.delete(task)
                     tableView.deleteRows(at: [selectedIndexPath!], with: .fade)
+                    
+                    if !finished {
+                        DispatchQueue.main.async {
+                            self.taskCountDelegate?.updateUnfinishedCountByDelete(tagId: tagId)
+                        }
+                    }
                 }
             }
         }
@@ -521,9 +555,16 @@ extension TagViewController: TaskViewDelegate {
         if let task = listTasks?[selectedIndexPath!.row] {
             if task.taskId == taskId {
                 try? realm.write {
+                    let finished = task.finished
                     task.archived = true
                     task.updateTime = Date.init()
                     tableView.deleteRows(at: [selectedIndexPath!], with: .fade)
+                    
+                    if !finished {
+                        DispatchQueue.main.async {
+                            self.taskCountDelegate?.updateUnfinishedCount(task: task, value: -1)
+                        }
+                    }
                 }
             }
         }
