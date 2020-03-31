@@ -45,7 +45,7 @@ class IndexViewController: UIViewController {
         tableView.backgroundColor = UIColor.clear
         
         initData()
-        print(Realm.Configuration.defaultConfiguration.fileURL as Any)
+        print("路径：\(Realm.Configuration.defaultConfiguration.fileURL as Any)")
     }
     
     // 准备数据
