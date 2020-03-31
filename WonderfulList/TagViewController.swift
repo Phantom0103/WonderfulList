@@ -178,7 +178,7 @@ class TagViewController: UIViewController {
                 }
                 
                 DispatchQueue.main.async {
-                    self.taskCountDelegate?.updateUnfinishedCount(task: task, value: task.finished ? -1 : 1)
+                    self.taskCountDelegate?.updateTask(tagId: task.tagId, value: task.finished ? -1 : 1)
                 }
             }
         }
@@ -212,9 +212,17 @@ class TagViewController: UIViewController {
         alertController.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: "好的", style: .default, handler: { (_) in
             var success = false
+            // key: tagId, value; count
+            var dict = [Int : Int]()
             try? self.realm.write {
                 let preDeleteTasks = self.listTasks!.filter("finished = true")
                 if !preDeleteTasks.isEmpty {
+                    for preDeleteTask in preDeleteTasks {
+                        let tagId = preDeleteTask.tagId
+                        let c = dict[tagId] ?? 0
+                        dict[tagId] = c + 1
+                    }
+                    
                     self.realm.delete(preDeleteTasks)
                     success = true
                 }
@@ -222,6 +230,9 @@ class TagViewController: UIViewController {
             
             if success {
                 self.tableView.reloadData()
+                DispatchQueue.main.async {
+                    self.taskCountDelegate?.deleteTasks(dict: dict)
+                }
             }
         }))
         present(alertController, animated: true, completion: nil)
@@ -455,10 +466,8 @@ extension TagViewController: UITableViewDataSource, UITableViewDelegate {
                 realm.delete(preDelete)
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 
-                if !finished {
-                    DispatchQueue.main.async {
-                        self.taskCountDelegate?.updateUnfinishedCountByDelete(tagId: tagId)
-                    }
+                DispatchQueue.main.async {
+                    self.taskCountDelegate?.deleteTask(tagId: tagId, finished: finished)
                 }
             }
         }
@@ -485,7 +494,7 @@ extension TagViewController: TaskViewDelegate {
         }
         
         DispatchQueue.main.async {
-            self.taskCountDelegate?.updateUnfinishedCountByAdd(task: task)
+            self.taskCountDelegate?.addTask(tagId: tagId)
         }
     }
     
@@ -503,9 +512,6 @@ extension TagViewController: TaskViewDelegate {
                 task.updateTime = Date.init()
                 
                 tableView.reloadRows(at: [selectedIndexPath!], with: .automatic)
-                DispatchQueue.main.async {
-                    self.taskCountDelegate?.updateUnfinishedCountDefaultTag()
-                }
             }
         }
     }
@@ -524,7 +530,7 @@ extension TagViewController: TaskViewDelegate {
                         cell.taskLabel.attributedText = attributedText
                         
                         DispatchQueue.main.async {
-                            self.taskCountDelegate?.updateUnfinishedCount(task: task, value: -1)
+                            self.taskCountDelegate?.updateTask(tagId: task.tagId, value: -1)
                         }
                     }
                 }
@@ -541,10 +547,8 @@ extension TagViewController: TaskViewDelegate {
                     realm.delete(task)
                     tableView.deleteRows(at: [selectedIndexPath!], with: .fade)
                     
-                    if !finished {
-                        DispatchQueue.main.async {
-                            self.taskCountDelegate?.updateUnfinishedCountByDelete(tagId: tagId)
-                        }
+                    DispatchQueue.main.async {
+                        self.taskCountDelegate?.deleteTask(tagId: tagId, finished: finished)
                     }
                 }
             }
@@ -562,7 +566,7 @@ extension TagViewController: TaskViewDelegate {
                     
                     if !finished {
                         DispatchQueue.main.async {
-                            self.taskCountDelegate?.updateUnfinishedCount(task: task, value: -1)
+                            self.taskCountDelegate?.updateTask(tagId: task.tagId, value: -1)
                         }
                     }
                 }

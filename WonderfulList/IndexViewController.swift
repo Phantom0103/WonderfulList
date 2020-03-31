@@ -10,11 +10,12 @@ import UIKit
 import RealmSwift
 
 protocol TagTaskCountDelegate {
+    func addTask(tagId: Int)
     // 更新任务未完成数量，value：未完成数增加或者减少
-    func updateUnfinishedCount(task: ListTask, value: Int)
-    func updateUnfinishedCountByAdd(task: ListTask)
-    func updateUnfinishedCountByDelete(tagId: Int)
-    func updateUnfinishedCountDefaultTag()
+    func updateTask(tagId: Int, value: Int)
+    func deleteTask(tagId: Int, finished: Bool)
+    // 批量删除
+    func deleteTasks(dict: [Int : Int])
 }
 
 class IndexViewController: UIViewController {
@@ -30,6 +31,7 @@ class IndexViewController: UIViewController {
     let realm = try! Realm()
     
     let defaultTagImage = "tag-list"
+    var reloadSwitch = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +50,12 @@ class IndexViewController: UIViewController {
     
     // 准备数据
     private func initData() {
+        initDefaultTagData()
+        // 自定义的清单
+        customTags = realm.objects(ListTag.self).sorted(byKeyPath: "sort")
+    }
+    
+    private func initDefaultTagData() {
         // 默认清单的主题
         let tagThemeToday = defaults.integer(forKey: UserDefaultsKeys.TagThemeDefault.tagThemeToday)
         let tagThemeImportant = defaults.integer(forKey: UserDefaultsKeys.TagThemeDefault.tagThemeImportant)
@@ -67,9 +75,15 @@ class IndexViewController: UIViewController {
             ListTag(value: ["tagId": 3, "tagImage": "tag-schedule", "tagName": "制定的计划", "tagTheme": tagThemeSchedule, "unfinishedTaskCount": tasksSchedule.count]),
             ListTag(value: ["tagId": 4, "tagImage": "tag-task", "tagName": "事项", "tagTheme": tagThemeTask, "unfinishedTaskCount": tasks.count])
         ]
-        
-        // 自定义的清单
-        customTags = realm.objects(ListTag.self).sorted(byKeyPath: "sort")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if reloadSwitch {
+            initDefaultTagData()
+            tableView.reloadData()
+        } else {
+            reloadSwitch = true
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -244,53 +258,42 @@ extension IndexViewController: TagViewDelegate, UITableViewDataSource, UITableVi
 
 extension IndexViewController: TagTaskCountDelegate {
     
-    func updateUnfinishedCount(task: ListTask, value: Int) {
-        let tagId = task.tagId
-        if tagId < 10 {
-            updateUnfinishedCountDefaultTag()
-        } else {
-            var r = 0
-            for (row, tag) in customTags!.enumerated() {
-                if tag.tagId == tagId {
-                    try? realm.write {
-                        tag.unfinishedTaskCount += value
-                    }
-                    r = row
-                    break
-                }
+    func addTask(tagId: Int) {
+        // 能查出来tag，就说明这是customTags
+        if let tag = realm.object(ofType: ListTag.self, forPrimaryKey: tagId) {
+            try? realm.write {
+                tag.taskCount += 1
+                tag.unfinishedTaskCount += 1
             }
-            updateUnfinishedCountDefaultTag()
-            tableView.reloadRows(at: [IndexPath(row: r, section: 0)], with: .automatic)
         }
     }
     
-    func updateUnfinishedCountByAdd(task: ListTask) {
-        let tagId = task.tagId
-        if tagId < 10 {
-            updateUnfinishedCountDefaultTag()
-        } else {
-            var r = 0
-            for (row, tag) in customTags!.enumerated() {
-                if tag.tagId == tagId {
-                    try? realm.write {
-                        tag.taskCount += 1
-                        tag.unfinishedTaskCount += 1
-                    }
-                    r = row
-                    break
-                }
+    func updateTask(tagId: Int, value: Int) {
+        if let tag = realm.object(ofType: ListTag.self, forPrimaryKey: tagId) {
+            try? realm.write {
+                tag.unfinishedTaskCount += value
             }
-            updateUnfinishedCountDefaultTag()
-            tableView.reloadRows(at: [IndexPath(row: r, section: 0)], with: .automatic)
         }
     }
     
-    func updateUnfinishedCountByDelete(tagId: Int) {
-        updateUnfinishedCountDefaultTag()
+    func deleteTask(tagId: Int, finished: Bool) {
+        if let tag = realm.object(ofType: ListTag.self, forPrimaryKey: tagId) {
+            try? realm.write {
+                tag.taskCount -= 1
+                if !finished {
+                    tag.unfinishedTaskCount -= 1
+                }
+            }
+        }
     }
     
-    func updateUnfinishedCountDefaultTag() {
-        tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0), IndexPath(row: 2, section: 0), IndexPath(row: 3, section: 0)], with: .automatic)
+    func deleteTasks(dict: [Int : Int]) {
+        for (tagId, count) in dict {
+            if let tag = realm.object(ofType: ListTag.self, forPrimaryKey: tagId) {
+                try? realm.write {
+                    tag.taskCount -= count
+                }
+            }
+        }
     }
-    
 }

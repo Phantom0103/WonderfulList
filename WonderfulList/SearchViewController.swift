@@ -54,7 +54,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 }
                 
                 DispatchQueue.main.async {
-                    self.taskCountDelegate?.updateUnfinishedCount(task: task, value: task.finished ? -1 : 1)
+                    self.taskCountDelegate?.updateTask(tagId: task.tagId, value: task.finished ? -1 : 1)
                 }
             }
         }
@@ -182,9 +182,6 @@ extension SearchViewController: TaskViewDelegate {
                 task.updateTime = Date.init()
                 
                 tableView.reloadRows(at: [selectedIndexPath!], with: .automatic)
-                DispatchQueue.main.async {
-                    self.taskCountDelegate?.updateUnfinishedCountDefaultTag()
-                }
             }
         }
     }
@@ -203,7 +200,7 @@ extension SearchViewController: TaskViewDelegate {
                         cell.taskLabel.attributedText = attributedText
                         
                         DispatchQueue.main.async {
-                            self.taskCountDelegate?.updateUnfinishedCount(task: task, value: -1)
+                            self.taskCountDelegate?.updateTask(tagId: task.tagId, value: -1)
                         }
                     }
                 }
@@ -220,10 +217,8 @@ extension SearchViewController: TaskViewDelegate {
                     realm.delete(task)
                     tableView.deleteRows(at: [selectedIndexPath!], with: .fade)
                     
-                    if !finished {
-                        DispatchQueue.main.async {
-                            self.taskCountDelegate?.updateUnfinishedCountByDelete(tagId: tagId)
-                        }
+                    DispatchQueue.main.async {
+                        self.taskCountDelegate?.deleteTask(tagId: tagId, finished: finished)
                     }
                 }
             }
@@ -241,7 +236,7 @@ extension SearchViewController: TaskViewDelegate {
                     
                     if !finished {
                         DispatchQueue.main.async {
-                            self.taskCountDelegate?.updateUnfinishedCount(task: task, value: -1)
+                            self.taskCountDelegate?.updateTask(tagId: task.tagId, value: -1)
                         }
                     }
                 }

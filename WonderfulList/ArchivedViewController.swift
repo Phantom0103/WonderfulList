@@ -78,7 +78,7 @@ class ArchivedViewController: UIViewController, UITableViewDataSource, UITableVi
                     // 未完成的恢复归档，未完成数+1
                     if !task.finished {
                         DispatchQueue.main.async {
-                            self.taskCountDelegate?.updateUnfinishedCount(task: task, value: 1)
+                            self.taskCountDelegate?.updateTask(tagId: task.tagId, value: 1)
                         }
                     }
                 }
