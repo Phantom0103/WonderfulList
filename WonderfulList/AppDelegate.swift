@@ -7,18 +7,21 @@
 //
 
 import UIKit
+import RealmSwift
 //import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
+    let defaults = UserDefaults.standard
+    let realm = try! Realm()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // 请求通知权限
         //UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (accepted, error) in}
-        
+        resetTodayTag()
         return true
     }
 
@@ -34,6 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        resetTodayTag()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -44,6 +48,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-
+    // 清空“新的一天”清单数据
+    private func resetTodayTag() {
+        let lastTs = defaults.double(forKey: UserDefaultsKeys.todayTagResetTs)
+        
+        // 获取当天0点时间戳
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day], from: Date.init())
+        let nowTs = calendar.date(from: components)!.timeIntervalSince1970
+        
+        if lastTs < nowTs {
+            let tasks = realm.objects(ListTask.self).filter("today = true")
+            if !tasks.isEmpty {
+                try? realm.write {
+                    tasks.setValue(false, forKey: "today")
+                    tasks.setValue(Date.init(), forKey: "updateTime")
+                }
+            }
+            
+            defaults.set(Date.init().timeIntervalSince1970, forKey: UserDefaultsKeys.todayTagResetTs)
+        }
+    }
 }
 

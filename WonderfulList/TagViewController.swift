@@ -262,8 +262,14 @@ class TagViewController: UIViewController {
     
     // 删除此清单
     func deleteTag() {
-        delegate?.didDeleteTag(tag: tag!)
-        navigationController?.popViewController(animated: true)
+        let alertController = UIAlertController(title: "注意", message: "这将永久删除清单和清单里的任务", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "好的", style: .default, handler: { (_) in
+            self.delegate?.didDeleteTag(tag: self.tag!)
+            self.navigationController?.popViewController(animated: true)
+        }))
+        
+        present(alertController, animated: true, completion: nil)
     }
     
     @IBAction func cancelChangeTheme(_ sender: Any) {

@@ -120,31 +120,26 @@ class IndexViewController: UIViewController {
     }
     
     func deleteTag(tag: ListTag, indexPath: IndexPath) {
-        let alertController = UIAlertController(title: "注意", message: "这将永久删除清单和清单里的任务", preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
-        alertController.addAction(UIAlertAction(title: "好的", style: .default, handler: { (_) in
-            var success = true
-            do {
-                try self.realm.write {
-                    // 先删除清单下的任务
-                    let preDeleteTasks = self.realm.objects(ListTask.self).filter("tagId = \(tag.tagId)")
-                    if !preDeleteTasks.isEmpty {
-                        self.realm.delete(preDeleteTasks)
-                    }
-                    
-                    // 删除清单
-                    self.realm.delete(tag)
+        var success = true
+        do {
+            try self.realm.write {
+                // 先删除清单下的任务
+                let preDeleteTasks = self.realm.objects(ListTask.self).filter("tagId = \(tag.tagId)")
+                if !preDeleteTasks.isEmpty {
+                    self.realm.delete(preDeleteTasks)
                 }
-            } catch {
-                success = false
+                
+                // 删除清单
+                self.realm.delete(tag)
             }
-  
-            if success {
-                self.tableView.reloadData()
-            }
-        }))
-        
-        present(alertController, animated: true, completion: nil)
+        } catch {
+            success = false
+        }
+
+        if success {
+            initDefaultTagData()
+            self.tableView.reloadData()
+        }
     }
 }
 
@@ -219,7 +214,13 @@ extension IndexViewController: TagViewDelegate, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             if indexPath.section == 1 {
-                deleteTag(tag: self.customTags![indexPath.row], indexPath: indexPath)
+                let alertController = UIAlertController(title: "注意", message: "这将永久删除清单和清单里的任务", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+                alertController.addAction(UIAlertAction(title: "好的", style: .default, handler: { (_) in
+                    self.deleteTag(tag: self.customTags![indexPath.row], indexPath: indexPath)
+                }))
+                
+                present(alertController, animated: true, completion: nil)
             }
         }
     }

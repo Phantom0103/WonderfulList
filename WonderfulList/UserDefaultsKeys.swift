@@ -11,6 +11,7 @@ import Foundation
 struct UserDefaultsKeys {
     
     static let tagSort = "tag-sort"
+    static let todayTagResetTs = "today-tag-reset-ts"
     
     // 主键
     struct RealmPrimaryKey {
