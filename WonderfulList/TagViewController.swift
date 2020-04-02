@@ -107,16 +107,22 @@ class TagViewController: UIViewController {
     
     // 初始化下拉菜单
     private func initMenuView() {
-        let menus = [
+        var menus = [
             Menu(id: 1, image: "action-archive-white-20", title: "归档已完成"),
             Menu(id: 2, image: "action-finish-white-20", title: "删除已完成"),
-            Menu(id: 3, image: "action-theme-white-20", title: "更换主题"),
-            Menu(id: 4, image: "action-trash-white-20", title: "删除此清单")
+            Menu(id: 3, image: "action-theme-white-20", title: "更换主题")
         ]
+        
         let width = CGFloat(160)
-        let height = CGFloat(176)
+        var height = CGFloat(132)
         let x = view.frame.width - width - 20
         let y = headerView.frame.origin.y
+        
+        if !isDefaultTag {
+            menus.append(Menu(id: 4, image: "action-trash-white-20", title: "删除此清单"))
+            height = CGFloat(176)
+        }
+        
         menuView = MenuView(frame: CGRect(x: x, y: y, width: width, height: height), menus: menus)
         menuView!.delegate = self
     }
