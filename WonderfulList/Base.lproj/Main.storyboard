@@ -11,7 +11,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--奇妙清单-->
+        <!--每日清单-->
         <scene sceneID="fpL-4K-xC7">
             <objects>
                 <viewController id="6HZ-mg-iMo" customClass="IndexViewController" customModule="WonderfulList" customModuleProvider="target" sceneMemberID="viewController">
@@ -128,7 +128,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="cWs-Bg-gSs"/>
                     </view>
-                    <navigationItem key="navigationItem" title="奇妙清单" largeTitleDisplayMode="never" id="DT6-gF-H2r">
+                    <navigationItem key="navigationItem" title="每日清单" largeTitleDisplayMode="never" id="DT6-gF-H2r">
                         <barButtonItem key="rightBarButtonItem" systemItem="search" id="L63-bB-ujw">
                             <connections>
                                 <segue destination="0I0-fg-m9w" kind="show" identifier="SearchTaskSegue" id="aZn-G3-5zw"/>
