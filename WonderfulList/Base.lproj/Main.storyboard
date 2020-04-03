@@ -1049,6 +1049,85 @@
             </objects>
             <point key="canvasLocation" x="893" y="812"/>
         </scene>
+        <!--Guide View Controller-->
+        <scene sceneID="f1F-pL-DMW">
+            <objects>
+                <viewController storyboardIdentifier="GuideVC" id="HDD-f5-PkP" customClass="GuideViewController" customModule="WonderfulList" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="67I-3F-v3y">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4qi-fP-s3i">
+                                <rect key="frame" x="172" y="829" width="70" height="33"/>
+                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="17"/>
+                                <state key="normal" title="开始体验"/>
+                                <connections>
+                                    <action selector="letsBegin:" destination="HDD-f5-PkP" eventType="touchUpInside" id="Cox-hl-WRd"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="4qi-fP-s3i" firstAttribute="centerX" secondItem="67I-3F-v3y" secondAttribute="centerX" id="HtU-Eb-Cio"/>
+                            <constraint firstItem="4qi-fP-s3i" firstAttribute="bottom" secondItem="hkc-6e-EBI" secondAttribute="bottom" id="aah-Nd-D97"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="hkc-6e-EBI"/>
+                    </view>
+                    <connections>
+                        <outlet property="letsBeginButton" destination="4qi-fP-s3i" id="keT-os-fyF"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OBQ-NF-h0K" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="893" y="2328"/>
+        </scene>
+        <!--Page View Controller-->
+        <scene sceneID="FuN-fm-l4E">
+            <objects>
+                <pageViewController storyboardIdentifier="GuidePageVC" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="rg3-mR-3cP" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TDU-ez-Zgk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1803" y="2328"/>
+        </scene>
+        <!--Guide Content View Controller-->
+        <scene sceneID="vRh-NJ-uCu">
+            <objects>
+                <viewController storyboardIdentifier="GuideContentVC" id="yoR-db-3Yc" customClass="GuideContentViewController" customModule="WonderfulList" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Eea-YN-jQ9">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uaG-ap-n8j">
+                                <rect key="frame" x="20" y="84" width="374" height="26.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="22"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EqP-cr-pBV">
+                                <rect key="frame" x="69" y="244.5" width="276" height="597.5"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="uaG-ap-n8j" firstAttribute="top" secondItem="1F9-Wq-4kt" secondAttribute="top" constant="40" id="0iT-eo-DUF"/>
+                            <constraint firstItem="1F9-Wq-4kt" firstAttribute="bottom" secondItem="EqP-cr-pBV" secondAttribute="bottom" constant="20" id="9sg-pD-MVk"/>
+                            <constraint firstItem="EqP-cr-pBV" firstAttribute="height" secondItem="Eea-YN-jQ9" secondAttribute="height" multiplier="2:3" id="OCT-9p-joY"/>
+                            <constraint firstItem="1F9-Wq-4kt" firstAttribute="trailing" secondItem="uaG-ap-n8j" secondAttribute="trailing" constant="20" id="a9l-Pw-mN9"/>
+                            <constraint firstItem="uaG-ap-n8j" firstAttribute="leading" secondItem="1F9-Wq-4kt" secondAttribute="leading" constant="20" id="aY2-gC-YFI"/>
+                            <constraint firstItem="EqP-cr-pBV" firstAttribute="centerX" secondItem="Eea-YN-jQ9" secondAttribute="centerX" id="jdE-0S-M1H"/>
+                            <constraint firstItem="EqP-cr-pBV" firstAttribute="width" secondItem="Eea-YN-jQ9" secondAttribute="width" multiplier="2:3" id="mS8-Bb-XGK"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="1F9-Wq-4kt"/>
+                    </view>
+                    <connections>
+                        <outlet property="guideImageView" destination="EqP-cr-pBV" id="CbP-mL-FSD"/>
+                        <outlet property="guideLabel" destination="uaG-ap-n8j" id="0u0-Tc-RaR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gck-jk-TTP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2726.0869565217395" y="2327.0089285714284"/>
+        </scene>
     </scenes>
     <resources>
         <image name="action-add-blue-22" width="22" height="22"/>
@@ -1065,7 +1144,7 @@
         <image name="theme13-thumbnail" width="50" height="49"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="LWY-cm-eeB"/>
+        <segue reference="cL7-zf-C3r"/>
         <segue reference="Wgj-25-Ls5"/>
     </inferredMetricsTieBreakers>
 </document>

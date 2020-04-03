@@ -21,6 +21,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // 请求通知权限
         //UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (accepted, error) in}
+        
+        let hasLaunch = defaults.bool(forKey: UserDefaultsKeys.hasLaunch)
+        //if !hasLaunch {
+            window?.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "GuideVC")
+            defaults.set(true, forKey: UserDefaultsKeys.hasLaunch)
+        //}
+        
         resetTodayTag()
         return true
     }

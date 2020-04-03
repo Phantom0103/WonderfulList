@@ -24,6 +24,9 @@
 		CB6B11FE242066B300D75FC3 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6B11FD242066B300D75FC3 /* MenuView.swift */; };
 		CB6BE33D242F878E00E64ADE /* ArchivedTaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6BE33C242F878E00E64ADE /* ArchivedTaskCell.swift */; };
 		CB6BE33F242F88F300E64ADE /* ArchivedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6BE33E242F88F300E64ADE /* ArchivedViewController.swift */; };
+		CB7CDA452436D85D00C68BAE /* GuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7CDA442436D85D00C68BAE /* GuideViewController.swift */; };
+		CB7CDA472436D89B00C68BAE /* GuideContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7CDA462436D89B00C68BAE /* GuideContentViewController.swift */; };
+		CB7CDA492436E8F000C68BAE /* GuideContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7CDA482436E8F000C68BAE /* GuideContent.swift */; };
 		CB7F056724111E680031102C /* ListTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7F056624111E680031102C /* ListTag.swift */; };
 		E4FC9DBBF1ADAF90902FA368 /* Pods_WonderfulList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B74653F663E74800299B9BBA /* Pods_WonderfulList.framework */; };
 /* End PBXBuildFile section */
@@ -51,6 +54,9 @@
 		CB6B11FD242066B300D75FC3 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		CB6BE33C242F878E00E64ADE /* ArchivedTaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedTaskCell.swift; sourceTree = "<group>"; };
 		CB6BE33E242F88F300E64ADE /* ArchivedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedViewController.swift; sourceTree = "<group>"; };
+		CB7CDA442436D85D00C68BAE /* GuideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideViewController.swift; sourceTree = "<group>"; };
+		CB7CDA462436D89B00C68BAE /* GuideContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideContentViewController.swift; sourceTree = "<group>"; };
+		CB7CDA482436E8F000C68BAE /* GuideContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideContent.swift; sourceTree = "<group>"; };
 		CB7F056624111E680031102C /* ListTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTag.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,6 +102,7 @@
 		CB2E73982410968E00215008 /* WonderfulList */ = {
 			isa = PBXGroup;
 			children = (
+				CB7CDA432436D82500C68BAE /* Guide */,
 				CB2E73AD24109F9A00215008 /* Model */,
 				CB2E73AC24109F8C00215008 /* View */,
 				CB2E73AB24109F7800215008 /* Controller */,
@@ -141,6 +148,16 @@
 				CB49BCC42421BE95002CDE6A /* UserDefaultsKeys.swift */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		CB7CDA432436D82500C68BAE /* Guide */ = {
+			isa = PBXGroup;
+			children = (
+				CB7CDA442436D85D00C68BAE /* GuideViewController.swift */,
+				CB7CDA462436D89B00C68BAE /* GuideContentViewController.swift */,
+				CB7CDA482436E8F000C68BAE /* GuideContent.swift */,
+			);
+			name = Guide;
 			sourceTree = "<group>";
 		};
 		E9E3C5035951D8BC0EC91293 /* Frameworks */ = {
@@ -267,6 +284,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB49BCC52421BE95002CDE6A /* UserDefaultsKeys.swift in Sources */,
+				CB7CDA452436D85D00C68BAE /* GuideViewController.swift in Sources */,
 				CB56A46F2415E73E001FFC76 /* ListTaskCell.swift in Sources */,
 				CB3482DA2412866D0045B06B /* TagThemeCell.swift in Sources */,
 				CB6BE33F242F88F300E64ADE /* ArchivedViewController.swift in Sources */,
@@ -279,7 +297,9 @@
 				CB56A4712415F2B2001FFC76 /* CustomUtils.swift in Sources */,
 				CB56A46D2415DA28001FFC76 /* TaskViewController.swift in Sources */,
 				CB2E73B12410AAC800215008 /* ListTagCell.swift in Sources */,
+				CB7CDA472436D89B00C68BAE /* GuideContentViewController.swift in Sources */,
 				CB2E73AF2410A07300215008 /* IndexViewController.swift in Sources */,
+				CB7CDA492436E8F000C68BAE /* GuideContent.swift in Sources */,
 				CB6BE33D242F878E00E64ADE /* ArchivedTaskCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
