@@ -23,10 +23,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (accepted, error) in}
         
         let hasLaunch = defaults.bool(forKey: UserDefaultsKeys.hasLaunch)
-        //if !hasLaunch {
+        if !hasLaunch {
             window?.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "GuideVC")
             defaults.set(true, forKey: UserDefaultsKeys.hasLaunch)
-        //}
+        }
         
         resetTodayTag()
         return true
