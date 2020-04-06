@@ -80,7 +80,7 @@ extension GuideViewController: UIPageViewControllerDataSource, UIPageViewControl
         if finished, letsBeginButton.alpha == 0 {
             let currentVC = pageViewController.viewControllers![0] as! GuideContentViewController
             if currentVC.pageIndex == guides.count - 1 {
-                UIView.animate(withDuration: 1) {
+                UIView.animate(withDuration: 0.5) {
                     self.letsBeginButton.alpha = 1
                     self.view.layoutIfNeeded()
                 }

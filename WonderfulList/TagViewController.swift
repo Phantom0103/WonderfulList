@@ -73,8 +73,6 @@ class TagViewController: UIViewController {
             
             initData()
         } else {
-            tagTextField.placeholder = "请输入清单名称"
-            
             navigationItem.rightBarButtonItems?.remove(at: 0)
             cancelChangeThemeBtn.isHidden = true
             confirmChangeThemeBtn.isHidden = true
@@ -156,10 +154,10 @@ class TagViewController: UIViewController {
         // 深色背景文字变成白色
         if darkTheme.contains(themeId) {
             tagTextField.textColor = UIColor.white
-            tagTextField.setValue(UIColor.white, forKeyPath: "_placeholderLabel.textColor")
+            tagTextField.attributedPlaceholder = NSAttributedString(string: "请输入清单名称", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         } else {
             tagTextField.textColor = UIColor.black
-            tagTextField.setValue(UIColor.init(red: 199, green: 199, blue: 205, alpha: 1.0), forKeyPath: "_placeholderLabel.textColor")
+            tagTextField.attributedPlaceholder = NSAttributedString(string: "请输入清单名称", attributes: [NSAttributedString.Key.foregroundColor: UIColor.init(red: 199/255, green: 199/255, blue: 205/255, alpha: 1.0)])
         }
     }
     
@@ -216,7 +214,7 @@ class TagViewController: UIViewController {
     func deleteFinished() {
         let alertController = UIAlertController(title: "注意", message: "这将永久删除任务", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
-        alertController.addAction(UIAlertAction(title: "好的", style: .default, handler: { (_) in
+        alertController.addAction(UIAlertAction(title: "好的", style: .destructive, handler: { (_) in
             var success = false
             // key: tagId, value; count
             var dict = [Int : Int]()
@@ -270,7 +268,7 @@ class TagViewController: UIViewController {
     func deleteTag() {
         let alertController = UIAlertController(title: "注意", message: "这将永久删除清单和清单里的任务", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
-        alertController.addAction(UIAlertAction(title: "好的", style: .default, handler: { (_) in
+        alertController.addAction(UIAlertAction(title: "好的", style: .destructive, handler: { (_) in
             self.delegate?.didDeleteTag(tag: self.tag!)
             self.navigationController?.popViewController(animated: true)
         }))

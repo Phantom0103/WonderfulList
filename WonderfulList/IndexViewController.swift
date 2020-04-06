@@ -215,7 +215,7 @@ extension IndexViewController: TagViewDelegate, UITableViewDataSource, UITableVi
             if indexPath.section == 1 {
                 let alertController = UIAlertController(title: "注意", message: "这将永久删除清单和清单里的任务", preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
-                alertController.addAction(UIAlertAction(title: "好的", style: .default, handler: { (_) in
+                alertController.addAction(UIAlertAction(title: "好的", style: .destructive, handler: { (_) in
                     self.deleteTag(tag: self.customTags![indexPath.row], indexPath: indexPath)
                 }))
                 
